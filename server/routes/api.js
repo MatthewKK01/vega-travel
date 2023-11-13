@@ -29,7 +29,24 @@ router.post("/register", (req, res) => {
       res.status(400).send("Registration failed. Error: " + err);
     });
 });
+router.post("/login", (req, res) => {
+  let userData = req.body;
 
-
+  User.findOne({
+    email: userData.email,
+  })
+    .then((user) => {
+      if (!user) {
+        return res.status(400).json({ message: "Email not found" });
+      } else if (user.password !== userData.password) {
+        return res.status(400).json({ message: "Password is incorrect" });
+      } else {
+        return res.status(200).send(user);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 
 module.exports = router;
