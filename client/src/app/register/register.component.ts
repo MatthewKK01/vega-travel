@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-register',
@@ -8,8 +9,15 @@ import { Component } from '@angular/core';
 export class RegisterComponent {
   registeredUserData: any = {}
 
-  constructor() { }
+  constructor(private _auth: AuthService) { }
   registerUser() {
-    console.log(this.registeredUserData);
+
+    this._auth.registerUser(this.registeredUserData)
+      .subscribe(
+        {
+          next: response => console.log(response),
+          error: error => console.log(error)
+        }
+      )
   }
 }
