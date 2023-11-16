@@ -10,6 +10,7 @@ import { SpecialEventsComponent } from './special-events/special-events.componen
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http'
 import { AuthService } from './auth.service';
+import { EventsService } from './events.service';
 
 
 
@@ -28,7 +29,7 @@ import { AuthService } from './auth.service';
     HttpClientModule,
     AppRoutingModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, EventsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
