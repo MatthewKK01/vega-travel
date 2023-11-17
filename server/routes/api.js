@@ -10,6 +10,7 @@ const User = require("../models/user");
 const db =
   "mongodb+srv://Matthewkk01:Mate1010@cluster0.3uuxnhv.mongodb.net/VegaTravel";
 mongoose.connect(process.env.URL, {
+  dbName: "VegaTravel",
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
