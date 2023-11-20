@@ -2,13 +2,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const dotenv = require("dotenv");
+const jwt = require("jsonwebtoken");
 dotenv.config();
 const User = require("../models/user");
 
 // Connect to MongoDB database using Mongoose
 
-const db =
-  "mongodb+srv://Matthewkk01:Mate1010@cluster0.3uuxnhv.mongodb.net/VegaTravel";
 mongoose.connect(process.env.URL, {
   dbName: "VegaTravel",
   useNewUrlParser: true,
@@ -29,7 +28,11 @@ router.post("/register", (req, res) => {
   user
     .save()
     .then((registeredUser) => {
-      res.status(200).send(registeredUser);
+      let payload = {
+        subject: registeredUser._id,
+      };
+      let token = jwt.sign(payload, "secretKey");
+      res.status(200).send({ token });
     })
     .catch((err) => {
       res.status(400).send("Registration failed. Error: " + err);
@@ -49,7 +52,9 @@ router.post("/login", (req, res) => {
         return res.status(400).json({ message: "Password is incorrect" });
       } else {
         // if login works response user details
-        return res.status(200).send(user);
+        let payload = { subject: user._id };
+        let token = jwt.sign(payload, "secretKey");
+        return res.status(200).send({ token });
       }
     })
     .catch((err) => {
