@@ -14,6 +14,31 @@ mongoose.connect(process.env.URL, {
   useUnifiedTopology: true,
 });
 
+const verifyToken = (req, res, next) => {
+  if (!req.headers.authorization) {
+    return res.status(401).send("Unauthorized request");
+  }
+
+  const token = req.headers.authorization.split(" ")[1];
+
+  if (token === "null") {
+    return res.status(401).send("Unauthorized request");
+  }
+
+  try {
+    const payload = jwt.verify(token, "secretKey");
+
+    if (!payload) {
+      return res.status(401).send("Unauthorized request");
+    }
+
+    req.userId = payload.subject;
+    next();
+  } catch (error) {
+    return res.status(401).send("Unauthorized request");
+  }
+};
+
 router.get("/", (req, res) => {
   res.send("Hello API!");
 });
@@ -128,67 +153,10 @@ router.get("/events", (req, res) => {
   res.send(events);
 });
 
-router.get("/special", (req, res) => {
+router.get("/special", verifyToken, (req, res) => {
   let events = [
     {
-      id: 1,
-      name: "Britt Dyde",
-      address: "Apt 478",
-      date: "11/15/2022",
-    },
-    {
-      id: 2,
-      name: "Bancroft Osborn",
-      address: "PO Box 47765",
-      date: "6/2/2023",
-    },
-    {
-      id: 3,
-      name: "Kristien Obee",
-      address: "PO Box 2345",
-      date: "3/2/2023",
-    },
-    {
-      id: 4,
-      name: "Britney Surgenor",
-      address: "Suite 96",
-      date: "9/5/2023",
-    },
-    {
-      id: 5,
-      name: "Emyle Cardo",
-      address: "Suite 39",
-      date: "2/2/2023",
-    },
-    {
-      id: 6,
-      name: "Ely Anney",
-      address: "PO Box 51171",
-      date: "10/11/2023",
-    },
-    {
-      id: 7,
-      name: "Siegfried Woodford",
-      address: "Room 1148",
-      date: "5/16/2023",
-    },
-    {
-      id: 8,
-      name: "Aloysia Poppleton",
-      address: "Suite 8",
-      date: "1/25/2023",
-    },
-    {
-      id: 9,
-      name: "Sadie Tunnicliff",
-      address: "Room 729",
-      date: "3/1/2023",
-    },
-    {
-      id: 10,
-      name: "Wynn Hayto",
-      address: "Suite 38",
-      date: "3/16/2023",
+      specialEvent: "SpecialEvent",
     },
   ];
   res.send(events);
