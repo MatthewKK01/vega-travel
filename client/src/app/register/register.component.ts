@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent {
   registeredUserData: any = {}
+  errorText: string = "";
 
   constructor(private _auth: AuthService, private router: Router) { }
   registerUser() {
@@ -21,7 +22,10 @@ export class RegisterComponent {
             localStorage.setItem('token', response.token)
             this.router.navigate(['/special'])
           },
-          error: error => console.log(error)
+          error: error => {
+            console.log(error)
+            this.errorText = error.error
+          }
         }
       )
   }

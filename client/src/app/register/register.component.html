@@ -25,6 +25,7 @@
         placeholder="Enter your password"
       />
     </div>
+    <p *ngIf="errorText">{{ errorText }}</p>
 
     <button (click)="registerUser()" type="button" class="btn btn-primary">
       Register

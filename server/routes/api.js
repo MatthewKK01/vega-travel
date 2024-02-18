@@ -46,21 +46,36 @@ router.get("/", (req, res) => {
 router.post("/register", (req, res) => {
   let userData = req.body;
 
-  // Create a new User instance using the extracted data
-  let user = new User(userData);
+  // Check if a user with the same email already exists
+  User.findOne({ email: userData.email })
+    .then((existingUser) => {
+      if (existingUser) {
+        // If a user with the same email exists, return an error
+        res.status(400).send("Email is already registered");
+      } else {
+        // If the email is not already registered, create a new User instance
+        let user = new User(userData);
 
-  //save user
-  user
-    .save()
-    .then((registeredUser) => {
-      let payload = {
-        subject: registeredUser._id,
-      };
-      let token = jwt.sign(payload, "secretKey");
-      res.status(200).send({ token });
+        // Save the user
+        user
+          .save()
+          .then((registeredUser) => {
+            // Generate a token for the registered user
+            let payload = {
+              subject: registeredUser._id,
+            };
+            let token = jwt.sign(payload, "secretKey");
+
+            // Send the token in the response
+            res.status(200).send({ token });
+          })
+          .catch((err) => {
+            res.status(400).send("Registration failed. Error: " + err);
+          });
+      }
     })
     .catch((err) => {
-      res.status(400).send("Registration failed. Error: " + err);
+      res.status(500).send("Internal Server Error: " + err);
     });
 });
 router.post("/login", (req, res) => {

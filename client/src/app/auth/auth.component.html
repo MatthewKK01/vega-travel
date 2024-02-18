@@ -1,0 +1,23 @@
+<div class="user-section">
+  <a
+    routerLinkActive="active"
+    *ngIf="!tokenService.loggedIn()"
+    routerLink="/login"
+    class="login"
+    >Login</a
+  >
+  <a
+    routerLinkActive="active"
+    *ngIf="!tokenService.loggedIn()"
+    routerLink="/register"
+    class="register"
+    >Register</a
+  >
+
+  <a
+    *ngIf="tokenService.loggedIn()"
+    style="cursor: pointer"
+    (click)="tokenService.logOut()"
+    >logOut</a
+  >
+</div>

@@ -13,6 +13,14 @@ import { AuthService } from './auth.service';
 import { EventsService } from './events.service';
 import { AuthGuard } from './auth.guard';
 import { TokenInterceptorService } from './token-interceptor.service';
+import { AuthComponent } from './auth/auth.component';
+
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatInput, MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+
 
 
 
@@ -24,13 +32,20 @@ import { TokenInterceptorService } from './token-interceptor.service';
     LoginComponent,
     EventsComponent,
     SpecialEventsComponent,
+    AuthComponent,
 
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NoopAnimationsModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatNativeDateModule,
+    MatInputModule
+
   ],
   providers: [AuthService, EventsService, AuthGuard, {
     provide: HTTP_INTERCEPTORS,
